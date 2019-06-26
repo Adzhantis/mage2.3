@@ -1,0 +1,13 @@
+<IfVersion < 2.4>
+    order allow,deny
+    deny from all
+</IfVersion>
+<IfVersion >= 2.4>
+    Require all denied
+</IfVersion>
+
+
+<IfModule mod_php7.c>
+## Adjust memory limit
+    php_value memory_limit 1756M
+</IfModule>

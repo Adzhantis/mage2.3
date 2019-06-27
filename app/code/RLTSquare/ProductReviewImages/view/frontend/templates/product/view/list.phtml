@@ -36,6 +36,13 @@ $mediaDirectoryPath = $this->getUrl('pub/media/review_images');
             </div>
             <ol class="items review-items">
                 <?php foreach ($_items as $_review): ?>
+                <?php
+                    $thisReviewMediaCollection = $_objectManager->get('\RLTSquare\ProductReviewImages\Model\ReviewMediaFactory')
+                        ->create()
+                        ->getCollection()
+                        ->addFieldToFilter('review_id', $_review->getReviewId());
+                ?>
+
                     <li class="item review-item" itemscope itemprop="review" itemtype="http://schema.org/Review">
                         <div class="review-title"
                              itemprop="name"><?php echo $block->escapeHtml($_review->getTitle()) ?></div>
@@ -80,16 +87,12 @@ $mediaDirectoryPath = $this->getUrl('pub/media/review_images');
                         </div>
 
                         <div class="review-attachments">
-                            <p class="review-attachments-label">Attachments</p>
-                            <div class="review-media-value">
-                                <?php
-                                $thisReviewMediaCollection = $_objectManager->get('\RLTSquare\ProductReviewImages\Model\ReviewMediaFactory')
-                                    ->create()
-                                    ->getCollection()
-                                    ->addFieldToFilter('review_id', $_review->getReviewId());
-                                if (count($thisReviewMediaCollection))
-                                    foreach ($thisReviewMediaCollection as $m) {
-                                        ?>
+                            <?php if (count($thisReviewMediaCollection)): ?>
+                                <p class="review-attachments-label">
+                                    <?= __('Attachments'); ?>
+                                </p>
+                                <div class="review-media-value">
+                                    <?php foreach ($thisReviewMediaCollection as $m): ?>
                                         <div class="image item base-image" data-role="image">
                                             <div class="product-image-wrapper">
                                                 <img class="product-image" data-role="image-element"
@@ -97,12 +100,11 @@ $mediaDirectoryPath = $this->getUrl('pub/media/review_images');
                                                      alt="Image">
                                             </div>
                                         </div>
-                                        <?php
-                                    }
-                                else
-                                    echo __('No attachment available.');
-                                ?>
-                            </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php else: ?>
+                                <?= __('No attachment available.'); ?>
+                            <?php endif; ?>
                         </div>
                     </li>
                 <?php endforeach; ?>
@@ -116,7 +118,8 @@ $mediaDirectoryPath = $this->getUrl('pub/media/review_images');
                 require(
                     [
                         'jquery',
-                        'Magento_Ui/js/modal/modal'
+                        'Magento_Ui/js/modal/modal',
+                        'mage/translate'
                     ],
                     function ($, modal) {
                         $(".product-image").on('click', function () {
@@ -126,7 +129,7 @@ $mediaDirectoryPath = $this->getUrl('pub/media/review_images');
 
                             $("#review-image-modal").modal({
                                 type: 'popup',
-                                title: 'Review Image',
+                                title: $.mage.__('Review Image'),
                                 clickableOverlay: true,
                                 buttons: [],
                                 responsive: true

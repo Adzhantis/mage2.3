@@ -223,7 +223,7 @@ return [
         'Magento_WishlistAnalytics' => 1,
         'Magento_WishlistGraphQl' => 1,
         'Magento_WishlistSampleData' => 1,
-        'RLTSquare_ProductReviewImages' => 0,
+        'RLTSquare_ProductReviewImages' => 1,
         'Temando_Shipping' => 1,
         'Training_FreeShipping' => 1,
         'Trustpilot_Reviews' => 1,
